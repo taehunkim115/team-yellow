@@ -19,6 +19,11 @@ function App() {
           Learn React with help from Andrew
         </a>
       </header>
+      <body>
+        <div>
+          <p>Hello</p>
+        </div>
+      </body>
     </div>
   );
 }
