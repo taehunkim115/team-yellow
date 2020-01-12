@@ -4,6 +4,7 @@ import 'rbx/index.css';
 import { Title, Button, Container } from 'rbx';
 import firebase from 'firebase/app';
 import 'firebase/database';
+import 'firebase/firestore';
 
 
 const firebaseConfig = {
@@ -17,13 +18,13 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database().ref("test/test/");
+const db = firebase.firestore(); //database().ref("test/test/");
 
 
 const CheckIn = () => {
   console.log('You checked in!');
   var date = new Date();
-  db.set({ time:date });
+  db.collection("test").doc("test").set({ time:date });
 }
 
 function App() {
