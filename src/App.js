@@ -20,18 +20,24 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore(); //database().ref("test/test/");
 
+const user = "User1"
 
 const CheckIn = () => {
   console.log('You checked in!');
   var date = new Date();
-  db.collection("test").doc("test").set({ time:date });
+  db.collection("test").doc(user).set({ time:date });
 }
 
 function App() {
   return (
     <Container>
-      <Title>Welcome, John!</Title>
-      <Button rounded={ true } color={ 'danger' } size={ 'large' } onClick={ CheckIn }>CheckIn</Button>
+      <Button.Group align="centered">
+        <Title>Welcome, { user }!</Title>
+      </Button.Group>
+
+      <Button.Group align="centered">
+        <Button rounded={ true } color={ 'danger' } size={ 'large' } onClick={ CheckIn }>CheckIn</Button>
+      </Button.Group>
     </Container>
   );
 }
