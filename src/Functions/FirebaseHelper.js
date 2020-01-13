@@ -24,9 +24,20 @@ const CheckIn = () => {
     db.collection("test").doc(user).set({ time:date });
 }
 
+var time = ''
+
+const FetchTime = () => {
+    db.collection("test").doc(user).get().then((data) => {
+        console.log(data.data())
+        time = data.data().time
+    })
+}
+
 const FirebaseHelper = {
     user, 
-    CheckIn
+    CheckIn,
+    FetchTime,
+    time
 }
 
 export default FirebaseHelper;

@@ -29,6 +29,7 @@ import FirebaseHelper from './Functions/FirebaseHelper';
 function App() {
   console.log(FirebaseHelper)
   console.log(FirebaseHelper.user)
+  FirebaseHelper.FetchTime()
   return (
     <Container>
       <Button.Group align="centered">
