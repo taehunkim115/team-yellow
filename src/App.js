@@ -18,7 +18,7 @@ const firebaseConfig = {
 };
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(); //database().ref("test/test/");
+const db = firebase.database(); //database().ref("test/test/");
 
 const user = "User1"
 
