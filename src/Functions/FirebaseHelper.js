@@ -1,7 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/firestore';
-import React from 'react';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBTMi1z22HLI8uiyOvLBOU_TkgSEwj18s4",
@@ -11,10 +10,10 @@ const firebaseConfig = {
     storageBucket: "checkin-26602.appspot.com",
     messagingSenderId: "929723304013",
     appId: "1:929723304013:web:af2b97d82f2e6c06cfb404"
-  };
-  // Initialize Firebase
+};
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(); //database().ref("test/test/");
+const db = firebase.firestore();
 
 const user = "User1";
 
@@ -26,13 +25,22 @@ const CheckIn = () => {
 
 var time = ''
 
-const FetchTime = () => {
-    db.collection("test").doc(user).get().then((data) => {
-        console.log(data.data())
-        time = data.data().time
-    })
-}
-
+const FetchTime = async (n) => {
+    try {
+        const response = await fetch(db.collection("test").doc(user).get()).then((data) => {
+            console.log(data.data())
+        });
+        if(!response.ok) throw response;
+        time = await response.time;
+        return time;
+    } catch (e) {
+        console.log(e);
+        return null;
+        // TODO: do something with this error
+        // time = new Date(0);
+    }
+};
+    
 const FirebaseHelper = {
     user, 
     CheckIn,
