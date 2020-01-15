@@ -44,3 +44,8 @@
 .container {
   padding-top: 5%;
 }
+
+.checkin-text {
+  width:100%;
+  text-align:center;
+}
