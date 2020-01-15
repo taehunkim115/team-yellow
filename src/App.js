@@ -28,7 +28,8 @@ const App = () => {
   }
 
   const AddContact = (name, number) => {
-    var newContacts = contacts;
+    var newContacts = [];
+    contacts.forEach(contact => newContacts.push(contact));
     newContacts.push({name:name, number:number});
     setContacts(newContacts);
   }
@@ -51,7 +52,7 @@ const App = () => {
                 {contact.name}
               </Table.Cell>
               <Table.Cell>
-                X
+                {contact.number}
               </Table.Cell>
             </Table.Row>
           )}
@@ -59,6 +60,9 @@ const App = () => {
       </Table>
     );
   };
+
+  var currName = '';
+  var currNum = '';
 
   return (
     <Container>
@@ -75,14 +79,14 @@ const App = () => {
       <EmergencyContacts contacts={ contacts }/>
       <Field>
         <Control>
-          <Input type='text' placeholder="Contact's Name"/>
+          <Input type='text' placeholder="Contact's Name" onChange={ e => currName=e.target.value }/>
         </Control>
         <Control>
-          <Input type='text' placeholder="Contact's Number"/>
+          <Input type='text' placeholder="Contact's Number" onChange={ e => currNum=e.target.value }/>
         </Control>
       </Field>
       <Button.Group align='centered'>
-        <Button size={ 'medium' } color={ 'info' } onClick={() => AddContact("test", "test")}>Add Emergency Contacts</Button>
+        <Button size={ 'medium' } color={ 'info' } onClick={() => AddContact(currName, currNum)}>Add Emergency Contacts</Button>
       </Button.Group>
 
     </Container>
