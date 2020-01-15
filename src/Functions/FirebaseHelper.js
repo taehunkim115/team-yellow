@@ -14,38 +14,34 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-
 const user = "User1";
 
 const CheckIn = () => {
-    console.log('You checked in!');
     var date = new Date();
-    db.collection("test").doc(user).set({ time:date });
+    db.collection("users").doc(user).set({ date })
+    .then( () => { console.log('You checked in!'); })
+    .catch( (error) => { console.log("Error writing checkin date: ", error)});
 }
 
-var time = ''
-
-const FetchTime = async (n) => {
-    try {
-        const response = await fetch(db.collection("test").doc(user).get()).then((data) => {
-            console.log(data.data())
-        });
-        if(!response.ok) throw response;
-        time = await response.time;
-        return time;
-    } catch (e) {
-        console.log(e);
-        return null;
-        // TODO: do something with this error
-        // time = new Date(0);
-    }
+const FetchTime = () => {
+    db.collection("users")
+    .doc(user)
+    .get()
+    .then(doc => {
+        var timestamp = doc.data().date.seconds*1000 + doc.data().date.nanoseconds/1000000;
+        var date = new Date(timestamp);
+        console.log("Timestamp: ", timestamp);
+        console.log("Data returned: ", date);
+        return date;
+    })
+    .catch( (error) => { console.log("Error fetching data for user: ", user);
+                         console.log(error) });
 };
     
 const FirebaseHelper = {
     user, 
     CheckIn,
-    FetchTime,
-    time
+    FetchTime
 }
 
 export default FirebaseHelper;
