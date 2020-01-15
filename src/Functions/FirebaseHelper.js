@@ -11,10 +11,11 @@ const firebaseConfig = {
     messagingSenderId: "929723304013",
     appId: "1:929723304013:web:af2b97d82f2e6c06cfb404"
 };
+
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const user = "User1";
+const user = "User4";
 
 const CheckIn = () => {
     var date = new Date();
@@ -23,19 +24,17 @@ const CheckIn = () => {
     .catch( (error) => { console.log("Error writing checkin date: ", error)});
 }
 
-const FetchTime = () => {
-    db.collection("users")
+async function FetchTime() {
+    return db.collection("users")
     .doc(user)
     .get()
     .then(doc => {
         var timestamp = doc.data().date.seconds*1000 + doc.data().date.nanoseconds/1000000;
         var date = new Date(timestamp);
-        console.log("Timestamp: ", timestamp);
-        console.log("Data returned: ", date);
         return date;
     })
     .catch( (error) => { console.log("Error fetching data for user: ", user);
-                         console.log(error) });
+                         return new Date(0); });
 };
     
 const FirebaseHelper = {
