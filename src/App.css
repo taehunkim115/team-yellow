@@ -49,3 +49,17 @@
   width:100%;
   text-align:center;
 }
+
+#contact-table {
+  margin:auto;
+}
+
+#contact-header {
+  width:100%;
+  text-align:center;
+}
+
+.input-box {
+  width: 300px;
+  margin: auto;
+}

@@ -32,22 +32,27 @@ const App = () => {
     contacts.forEach(contact => newContacts.push(contact));
     newContacts.push({name:name, number:number});
     setContacts(newContacts);
+
+    var inputs = document.getElementsByTagName('Input')
+    for (var i=0; i < inputs.length; i++) {
+      inputs[i].value = ''
+    }
   }
 
   const EmergencyContacts = ({contacts}) => {
     return (
-      <Table>
-        <Table.Head>
+      <Table id='contact-table'>
+        {/* <Table.Head>
           <Table.Row>
             <Table.Heading>
               Emergency Contacts
             </Table.Heading>
           </Table.Row>
-        </Table.Head>
+        </Table.Head> */}
 
         <Table.Body>
           {contacts.map(contact =>
-            <Table.Row>
+            <Table.Row key={contact.name.concat('_', contact.number)}>
               <Table.Cell>
                 {contact.name}
               </Table.Cell>
@@ -76,15 +81,20 @@ const App = () => {
       <div className='checkin-text' hidden={ !disabled }>You CheckedIn!</div>
       <div className='checkin-text' hidden={ disabled }>Please CheckIn!</div>
 
+      <br/>
+      <Title size={5} id='contact-header'>Emergency Contacts</Title>
       <EmergencyContacts contacts={ contacts }/>
+      <br/>
+      
       <Field>
-        <Control>
+        <Control className='input-box'>
           <Input type='text' placeholder="Contact's Name" onChange={ e => currName=e.target.value }/>
         </Control>
-        <Control>
+        <Control className='input-box'>
           <Input type='text' placeholder="Contact's Number" onChange={ e => currNum=e.target.value }/>
         </Control>
       </Field>
+      <br/>
       <Button.Group align='centered'>
         <Button size={ 'medium' } color={ 'info' } onClick={() => AddContact(currName, currNum)}>Add Emergency Contacts</Button>
       </Button.Group>
