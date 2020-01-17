@@ -19,10 +19,32 @@ const user = "John";
 
 const CheckIn = () => {
     var date = new Date();
-    db.collection("users").doc(user).set({ date })
+    db.collection("users").doc(user).update({ date:date })
     .then( () => { console.log('You checked in!'); })
     .catch( (error) => { console.log("Error writing checkin date: ", error)});
 }
+
+const ContactStore = (newcon) => {
+    return FetchContact().then(contacts => {
+                contacts.push(newcon)
+                db.collection("users").doc(user).update({ contacts:contacts })
+                .then( () => { console.log('You saved contact info!'); })
+                .catch( (error) => { console.log("Error writing contact info: ", error)})
+                return contacts
+    });
+}
+
+async function FetchContact() {
+    return db.collection("users")
+    .doc(user)
+    .get()
+    .then(doc => {
+        if (doc.data().contact === undefined) return [];
+        return doc.data().contact;
+    })
+    // .catch( (error) => { console.log("Error fetching data for user: ", user);
+    //                      return [] });
+};
 
 async function FetchTime() {
     return db.collection("users")
@@ -40,7 +62,8 @@ async function FetchTime() {
 const FirebaseHelper = {
     user, 
     CheckIn,
-    FetchTime
+    FetchTime,
+    ContactStore
 }
 
 export default FirebaseHelper;

@@ -31,6 +31,7 @@ const App = () => {
     var newContacts = [];
     contacts.forEach(contact => newContacts.push(contact));
     newContacts.push({name:name, number:number});
+    FirebaseHelper.ContactStore({name:name, number:number});
     setContacts(newContacts);
 
     var inputs = document.getElementsByTagName('Input')
@@ -93,7 +94,7 @@ const App = () => {
           <Input type='text' placeholder="Contact's Name" onChange={ e => currName=e.target.value }/>
         </Control>
         <Control className='input-box'>
-          <Input type='text' placeholder="Contact's Number" onChange={ e => currNum=e.target.value }/>
+          <Input type='text' placeholder="Contact's Email" onChange={ e => currNum=e.target.value }/>
         </Control>
       </Field>
       <br/>
