@@ -63,3 +63,15 @@
   width: 300px;
   margin: auto;
 }
+
+#checkin-button {
+  height:8em;
+  width:8em;
+}
+
+.divider {
+  width: 80%;
+  position:relative;
+  left:10%;
+  border-top: 2px solid #aaaaaa;
+}

@@ -71,17 +71,19 @@ const App = () => {
 
   return (
     <Container>
+      <br/>
       <Button.Group align="centered">
         <Title>Welcome, { FirebaseHelper.user }!</Title>
       </Button.Group>
 
       <Button.Group align="centered">
-        <Button rounded={ true } color={ 'danger' } size={ 'large' } onClick={ ButtonClick } disabled={ disabled }>CheckIn</Button>
+        <Button id='checkin-button' rounded={ true } color={ 'danger' } size={ 'large' } onClick={ ButtonClick } disabled={ disabled }>CheckIn</Button>
       </Button.Group>
       <div className='checkin-text' hidden={ !disabled }>You CheckedIn!</div>
       <div className='checkin-text' hidden={ disabled }>Please CheckIn!</div>
 
       <br/>
+      <hr class='divider'/>
       <Title size={5} id='contact-header'>Emergency Contacts</Title>
       <EmergencyContacts contacts={ contacts }/>
       <br/>
