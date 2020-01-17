@@ -15,7 +15,7 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const user = "User6";
+const user = "John";
 
 const CheckIn = () => {
     var date = new Date();
