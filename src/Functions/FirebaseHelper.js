@@ -42,8 +42,7 @@ async function FetchContact() {
         if (doc.data().contact === undefined) return [];
         return doc.data().contact;
     })
-    // .catch( (error) => { console.log("Error fetching data for user: ", user);
-    //                      return [] });
+    .catch( (error) => { console.log("Error fetching data for user: ", user);});
 };
 
 async function FetchTime() {
