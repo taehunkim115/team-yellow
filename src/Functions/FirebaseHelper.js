@@ -24,8 +24,8 @@ const CheckIn = () => {
     .catch( (error) => { console.log("Error writing checkin date: ", error)});
 }
 
-const StoreContact = (newcon) => {
-    return FetchContacts().then(contacts => {
+const ContactStore = (newcon) => {
+    return FetchContact().then(contacts => {
                 contacts.push(newcon);
                 db.collection("users").doc(user).update({ contacts:contacts })
                 .then( () => { console.log('You saved contact info!'); })
@@ -34,7 +34,7 @@ const StoreContact = (newcon) => {
     });
 }
 
-async function FetchContacts() {
+async function FetchContact() {
     return db.collection("users")
     .doc(user)
     .get()
@@ -62,8 +62,7 @@ const FirebaseHelper = {
     user, 
     CheckIn,
     FetchTime,
-    StoreContact,
-    FetchContacts
+    ContactStore
 }
 
 export default FirebaseHelper;
