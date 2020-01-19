@@ -17,6 +17,9 @@ const ButtonEnabled = (time) => {
 const App = () => {
   const [disabled, setDisabled] = useState(true);
   const [contacts, setContacts] = useState([]);
+  FirebaseHelper.FetchContacts().then(currContacts => {
+    setContacts(currContacts);
+  })
 
   FirebaseHelper.FetchTime().then(time => { 
     setDisabled(ButtonEnabled(time));
@@ -28,10 +31,15 @@ const App = () => {
   }
 
   const AddContact = (name, email) => {
+    if (!RegExp('[a-zA-Z0-9-_.]+@[a-zA-Z0-9]+.[a-zA-Z0-9]+').test(email)) {
+      console.log('Invalid Email');
+      return
+    }
+
     var newContacts = [];
     contacts.forEach(contact => newContacts.push(contact));
     newContacts.push({name:name, email:email});
-    FirebaseHelper.ContactStore({name:name, email:email});
+    FirebaseHelper.StoreContact({name:name, email:email});
     setContacts(newContacts);
 
     var inputs = document.getElementsByTagName('Input')
@@ -43,14 +51,6 @@ const App = () => {
   const EmergencyContacts = ({contacts}) => {
     return (
       <Table id='contact-table'>
-        {/* <Table.Head>
-          <Table.Row>
-            <Table.Heading>
-              Emergency Contacts
-            </Table.Heading>
-          </Table.Row>
-        </Table.Head> */}
-
         <Table.Body>
           {contacts.map(contact =>
             <Table.Row key={contact.name.concat('_', contact.email)}>
@@ -84,7 +84,7 @@ const App = () => {
       <div className='checkin-text' hidden={ disabled }>Please CheckIn!</div>
 
       <br/>
-      <hr class='divider'/>
+      <hr className='divider'/>
       <Title size={5} id='contact-header'>Emergency Contacts</Title>
       <EmergencyContacts contacts={ contacts }/>
       <br/>
