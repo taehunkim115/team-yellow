@@ -27,11 +27,11 @@ const App = () => {
     setDisabled(true);
   }
 
-  const AddContact = (name, number) => {
+  const AddContact = (name, email) => {
     var newContacts = [];
     contacts.forEach(contact => newContacts.push(contact));
-    newContacts.push({name:name, number:number});
-    FirebaseHelper.ContactStore({name:name, number:number});
+    newContacts.push({name:name, email:email});
+    FirebaseHelper.ContactStore({name:name, email:email});
     setContacts(newContacts);
 
     var inputs = document.getElementsByTagName('Input')
@@ -53,12 +53,12 @@ const App = () => {
 
         <Table.Body>
           {contacts.map(contact =>
-            <Table.Row key={contact.name.concat('_', contact.number)}>
+            <Table.Row key={contact.name.concat('_', contact.email)}>
               <Table.Cell>
                 {contact.name}
               </Table.Cell>
               <Table.Cell>
-                {contact.number}
+                {contact.email}
               </Table.Cell>
             </Table.Row>
           )}
