@@ -17,7 +17,9 @@ const ButtonEnabled = (time) => {
 const App = () => {
   const [disabled, setDisabled] = useState(true);
   const [contacts, setContacts] = useState([]);
-
+  FirebaseHelper.FetchContacts().then(newContacts => {
+    setContacts(newContacts)
+  });
   FirebaseHelper.FetchTime().then(time => { 
     setDisabled(ButtonEnabled(time));
   });
@@ -31,7 +33,7 @@ const App = () => {
     var newContacts = [];
     contacts.forEach(contact => newContacts.push(contact));
     newContacts.push({name:name, email:email});
-    FirebaseHelper.ContactStore({name:name, email:email});
+    FirebaseHelper.StoreContact({name:name, email:email});
     setContacts(newContacts);
 
     var inputs = document.getElementsByTagName('Input')
