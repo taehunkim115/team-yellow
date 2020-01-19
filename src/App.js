@@ -12,14 +12,17 @@ const ButtonEnabled = (time) => {
   );
 };
 
-
+const startContacts = (setContacts) => {
+  FirebaseHelper.FetchContacts().then(currContacts => {
+    setContacts(currContacts);
+  })
+};
 
 const App = () => {
   const [disabled, setDisabled] = useState(true);
   const [contacts, setContacts] = useState([]);
-  FirebaseHelper.FetchContacts().then(currContacts => {
-    setContacts(currContacts);
-  })
+  // startContacts(setContacts);
+  // if we uncomment this, currNum does not get passed into the addContact Function on line 105. We dont know why
 
   FirebaseHelper.FetchTime().then(time => { 
     setDisabled(ButtonEnabled(time));
@@ -35,7 +38,7 @@ const App = () => {
       console.log('Invalid Email');
       return
     }
-
+    console.log(email)
     var newContacts = [];
     contacts.forEach(contact => newContacts.push(contact));
     newContacts.push({name:name, email:email});
