@@ -70,8 +70,37 @@
 }
 
 .divider {
-  width: 80%;
   position:relative;
-  left:10%;
+  margin-right:auto;
+  margin-left:auto;
   border-top: 2px solid #aaaaaa;
+  margin-top: 1%;
+}
+
+/* Desktop */
+@media (min-width: 1025px) {
+  .divider {
+    width: 23%;
+  }
+}
+
+/* Laptop & Tablet */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .divider {
+    width: 32%;
+  }
+}
+
+/* Tablet */
+@media (min-width: 701px) and (max-width: 768px) {
+  .divider {
+    width: 40%;
+  }
+}
+
+/* Phone */
+@media (max-width: 700px) {
+  .divider {
+    width: 80%;
+  }
 }

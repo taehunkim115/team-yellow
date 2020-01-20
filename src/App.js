@@ -12,7 +12,7 @@ const ButtonEnabled = (time) => {
   );
 };
 
-// Commented out and moved to useEffect() in App function
+// NEW: Commented out and moved to useEffect() in App function
 // const startContacts = (setContacts) => {
 //   FirebaseHelper.FetchContacts().then(currContacts => {
 //     setContacts(currContacts);
@@ -29,8 +29,7 @@ const App = () => {
     setDisabled(ButtonEnabled(time));
   });
 
-  // purpose of startcontacts is to load contacts stored in firestore to the contacts state
-  // using useEffect will run startContacts on every render, so contact data from firestore is read every render
+  // NEW: using useEffect will run startContacts on every render, so contact data from firestore is read every render
   // it's also inside the App function so no issue regarding passing setContacts
   useEffect(() => {
     const startContacts = () => {
