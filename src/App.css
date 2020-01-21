@@ -77,6 +77,11 @@
   margin-top: 1%;
 }
 
+.invalid-email {
+  color: red;
+  text-align: center;
+}
+
 /* Desktop */
 @media (min-width: 1025px) {
   .divider {
@@ -104,3 +109,4 @@
     width: 80%;
   }
 }
+

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'rbx/index.css';
-import { Title, Button, Container, Table, Field, Control, Input } from 'rbx';
+import { Title, Button, Container, Table, Field, Control, Input, Content } from 'rbx';
 import FirebaseHelper from './Functions/FirebaseHelper';
 
 const currentDate = new Date();
@@ -22,6 +22,7 @@ const ButtonEnabled = (time) => {
 const App = () => {
   const [disabled, setDisabled] = useState(true);
   const [contacts, setContacts] = useState([]);
+  const [invalidEmail, setInvalidEmail] = useState(false);
   // startContacts(setContacts);
   // if we uncomment this, currNum does not get passed into the addContact Function on line 104. We dont know why
 
@@ -47,10 +48,10 @@ const App = () => {
 
   const AddContact = (name, email) => {
     if (!RegExp('[a-zA-Z0-9-_.]+@[a-zA-Z0-9]+.[a-zA-Z0-9]+').test(email)) {
-      console.log('Invalid Email');
+      setInvalidEmail(true);
       return
     }
-    console.log(email)
+    setInvalidEmail(false);
 
     FirebaseHelper.StoreContact({name:name, email:email}).then( newContacts => {
       setContacts(newContacts);
@@ -111,6 +112,7 @@ const App = () => {
           <Input type='text' placeholder="Contact's Email" onChange={ e => currNum=e.target.value }/>
         </Control>
       </Field>
+      <Content size='medium' className='invalid-email' hidden={ !invalidEmail }>Invalid Email</Content>
       <br/>
       <Button.Group align='centered'>
         <Button size={ 'medium' } color={ 'info' } onClick={() => AddContact(currName, currNum) }>Add Emergency Contacts</Button>
