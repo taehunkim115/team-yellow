@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'rbx/index.css';
 import { Title, Button, Container, Table, Field, Control, Input } from 'rbx';
@@ -12,11 +12,12 @@ const ButtonEnabled = (time) => {
   );
 };
 
-const startContacts = (setContacts) => {
-  FirebaseHelper.FetchContacts().then(currContacts => {
-    setContacts(currContacts);
-  })
-};
+// NEW: Commented out and moved to useEffect() in App function
+// const startContacts = (setContacts) => {
+//   FirebaseHelper.FetchContacts().then(currContacts => {
+//     setContacts(currContacts);
+//   })
+// };
 
 const App = () => {
   const [disabled, setDisabled] = useState(true);
@@ -27,6 +28,17 @@ const App = () => {
   FirebaseHelper.FetchTime().then(time => { 
     setDisabled(ButtonEnabled(time));
   });
+
+  // NEW: using useEffect will run startContacts on every render, so contact data from firestore is read every render
+  // it's also inside the App function so no issue regarding passing setContacts
+  useEffect(() => {
+    const startContacts = () => {
+      FirebaseHelper.FetchContacts().then(currContacts => {
+        setContacts(currContacts);
+      })
+    };
+    startContacts();
+  }, []);
 
   const ButtonClick = () => {
     FirebaseHelper.CheckIn();
@@ -101,7 +113,7 @@ const App = () => {
       </Field>
       <br/>
       <Button.Group align='centered'>
-        <Button size={ 'medium' } color={ 'info' } onClick={() => AddContact(currName, currNum)}>Add Emergency Contacts</Button>
+        <Button size={ 'medium' } color={ 'info' } onClick={() => AddContact(currName, currNum) }>Add Emergency Contacts</Button>
       </Button.Group>
 
     </Container>
