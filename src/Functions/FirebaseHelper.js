@@ -26,11 +26,11 @@ const CheckIn = () => {
 
 const StoreContact = (newcon) => {
     return FetchContacts().then(contacts => {
-                contacts.push(newcon);
-                db.collection("users").doc(user).update({ contacts:contacts })
-                .then( () => { console.log('You saved contact info!'); })
-                .catch( (error) => { console.log("Error writing contact info: ", error)});
-                return contacts;
+        contacts.push(newcon);
+        db.collection("users").doc(user).update({ contacts:contacts })
+        .then( () => { console.log('You saved contact info!'); })
+        .catch( (error) => { console.log("Error writing contact info: ", error)});
+        return contacts;
     });
 }
 
