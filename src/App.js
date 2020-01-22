@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'rbx/index.css';
-import { Title, Button, Container, Table, Field, Control, Input, Content } from 'rbx';
+import { Title, Button, Container, Table, Field, Control, Input, Content, Modal } from 'rbx';
 import FirebaseHelper from './Functions/FirebaseHelper';
 
 const currentDate = new Date();
@@ -23,6 +23,7 @@ const App = () => {
   const [disabled, setDisabled] = useState(true);
   const [contacts, setContacts] = useState([]);
   const [invalidEmail, setInvalidEmail] = useState(false);
+  const [showContacts, setShowContacts] = useState(false);
   // startContacts(setContacts);
   // if we uncomment this, currNum does not get passed into the addContact Function on line 104. We dont know why
 
@@ -44,6 +45,14 @@ const App = () => {
   const ButtonClick = () => {
     FirebaseHelper.CheckIn();
     setDisabled(true);
+  }
+
+  const RemoveContact = (contact) => {
+    FirebaseHelper.RemoveContact(contact);
+
+    FirebaseHelper.FetchContacts().then(currContacts => {
+      setContacts(currContacts);
+    })
   }
 
   const AddContact = (name, email) => {
@@ -75,6 +84,9 @@ const App = () => {
               <Table.Cell>
                 {contact.email}
               </Table.Cell>
+              <Table.Cell>
+                <Button onClick={()=>{RemoveContact(contact)}}>X</Button>
+              </Table.Cell>
             </Table.Row>
           )}
         </Table.Body>
@@ -92,14 +104,24 @@ const App = () => {
         <Title>Welcome, { FirebaseHelper.user }!</Title>
       </Button.Group>
 
+      <br/>
+
+      <Title subtitle size={4} className='checkin-text' hidden={ !disabled }>You CheckedIn!</Title>
+      <Title className='checkin-text' hidden={ disabled }>Please CheckIn!</Title>
+
       <Button.Group align="centered">
-        <Button id='checkin-button' rounded={ true } color={ 'danger' } size={ 'large' } onClick={ ButtonClick } disabled={ disabled }>CheckIn</Button>
+        <Button id='checkin-button' rounded={ true } color={ 'danger' } size={ 'large' } onClick={()=>{ alert("You have checked in!");ButtonClick();} } disabled={ disabled }>CheckIn</Button>
       </Button.Group>
-      <div className='checkin-text' hidden={ !disabled }>You CheckedIn!</div>
-      <div className='checkin-text' hidden={ disabled }>Please CheckIn!</div>
+
 
       <br/>
-      <hr className='divider'/>
+      {/* <hr className='divider'/> */}
+      <Button.Group align="centered">
+        <Button hidden={showContacts} onClick={() => {setShowContacts(true)}}>Edit Contacts</Button>
+        <Button hidden={!showContacts} onClick={() => {setShowContacts(false)}}>Close Contact Edit</Button>
+      </Button.Group>
+      
+      <div hidden={!showContacts}>
       <Title size={5} id='contact-header'>Emergency Contacts</Title>
       <EmergencyContacts contacts={ contacts }/>
       <br/>
@@ -117,6 +139,7 @@ const App = () => {
       <Button.Group align='centered'>
         <Button size={ 'medium' } color={ 'info' } onClick={() => AddContact(currName, currNum) }>Add Emergency Contacts</Button>
       </Button.Group>
+      </div>
 
     </Container>
   )

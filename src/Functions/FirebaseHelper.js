@@ -34,6 +34,10 @@ const StoreContact = (newcon) => {
     });
 }
 
+const RemoveContact = (oldContact) => {
+    db.collection("users").doc(user).update({"contacts": firebase.firestore.FieldValue.arrayRemove(oldContact)}).catch((error) => console.log(error));
+}
+
 async function FetchContacts() {
     return db.collection("users")
     .doc(user)
@@ -63,7 +67,8 @@ const FirebaseHelper = {
     CheckIn,
     FetchTime,
     StoreContact,
-    FetchContacts
+    FetchContacts,
+    RemoveContact
 }
 
 export default FirebaseHelper;
