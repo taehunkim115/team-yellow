@@ -3,8 +3,19 @@ import './App.css';
 import 'rbx/index.css';
 import { Title, Button, Container, Table, Field, Control, Input, Content, Modal } from 'rbx';
 import FirebaseHelper from './Functions/FirebaseHelper';
+import * as emailjs from 'emailjs-com'
 
 const currentDate = new Date();
+
+emailjs.init("user_5eWzW76xiRQHYgG8R0toY");
+
+var templateParams = {
+  user_name: FirebaseHelper.user, // user name
+  to_name: '', // emergency contact name
+  to_email: '', // emergency contact email
+  from_name: 'CheckIn', // App name
+  checkin_email: 'checkin.yellow@gmail.com' // App email
+ };
 
 const ButtonEnabled = (time) => {
   return (
@@ -12,27 +23,16 @@ const ButtonEnabled = (time) => {
   );
 };
 
-// NEW: Commented out and moved to useEffect() in App function
-// const startContacts = (setContacts) => {
-//   FirebaseHelper.FetchContacts().then(currContacts => {
-//     setContacts(currContacts);
-//   })
-// };
-
 const App = () => {
   const [disabled, setDisabled] = useState(true);
   const [contacts, setContacts] = useState([]);
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
-  // startContacts(setContacts);
-  // if we uncomment this, currNum does not get passed into the addContact Function on line 104. We dont know why
 
   FirebaseHelper.FetchTime().then(time => { 
     setDisabled(ButtonEnabled(time));
   });
 
-  // NEW: using useEffect will run startContacts on every render, so contact data from firestore is read every render
-  // it's also inside the App function so no issue regarding passing setContacts
   useEffect(() => {
     const startContacts = () => {
       FirebaseHelper.FetchContacts().then(currContacts => {
@@ -42,9 +42,17 @@ const App = () => {
     startContacts();
   }, []);
 
-  const ButtonClick = () => {
+
+  
+  const ButtonClick = (contacts) => {
     FirebaseHelper.CheckIn();
     setDisabled(true);
+
+    contacts.map((contact) => {
+      templateParams.to_name = contact.name; // set emergency contact name
+      templateParams.to_email = contact.email; // set emergency contact email
+      emailjs.send("gmail", "checkin", templateParams, "user_5eWzW76xiRQHYgG8R0toY");
+      })
   }
 
   const RemoveContact = (contact) => {
@@ -110,7 +118,7 @@ const App = () => {
       <Title className='checkin-text' hidden={ disabled }>Please CheckIn!</Title>
 
       <Button.Group align="centered">
-        <Button id='checkin-button' rounded={ true } color={ 'danger' } size={ 'large' } onClick={()=>{ alert("You have checked in!");ButtonClick();} } disabled={ disabled }>CheckIn</Button>
+        <Button id='checkin-button' rounded={ true } color={ 'danger' } size={ 'large' } onClick={()=>{ alert("You have checked in!");ButtonClick(contacts);} } disabled={ disabled }>CheckIn</Button>
       </Button.Group>
 
 
