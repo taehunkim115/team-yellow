@@ -19,7 +19,8 @@ var templateParams = {
   checkin_email: 'checkin.yellow@gmail.com' // App email
  };
 
-const ButtonEnabled = (time) => {
+const ButtonEnabled = (time, user) => {
+  if(!user) return true;
   return (
     time.getDay() === currentDate.getDay() && time.getMonth() === currentDate.getMonth() && time.getYear() === currentDate.getYear()
   );
@@ -30,11 +31,11 @@ const App = () => {
   const [contacts, setContacts] = useState([]);
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(FirebaseHelper.user);
 
 
   FirebaseHelper.FetchTime().then(time => { 
-    setDisabled(ButtonEnabled(time));
+    setDisabled(ButtonEnabled(time, user));
   });
 
   useEffect(() => {
@@ -50,6 +51,11 @@ const App = () => {
     FirebaseHelper.firebase.auth().onAuthStateChanged(setUser);
   }, []);
 
+  useEffect(() =>{
+    FirebaseHelper.FetchTime().then(time => { 
+      setDisabled(ButtonEnabled(time, user));
+    });
+  }, user);
   const Banner = ({ user }) => (
     <React.Fragment>
       { user ? <Welcome user={ user } /> : <SignIn /> }
@@ -60,20 +66,30 @@ const App = () => {
     <Message color="info">
       <Message.Header>
         Welcome, {user.displayName}
-        <Button primary onClick={() => FirebaseHelper.firebase.auth().signOut()}>
+        <Button primary onClick={SignOut}>
           Log out
         </Button>
       </Message.Header>
     </Message>
   );
   
-  const SignIn = () => (
-    <StyledFirebaseAuth
-      uiConfig={uiConfig}
-      firebaseAuth={FirebaseHelper.firebase.auth()}
-    />
-  );
+  const SignIn = () => {
+    FirebaseHelper.FetchTime().then(time => { 
+      setDisabled(ButtonEnabled(time, user));
+    });
+    return (
+      <StyledFirebaseAuth
+        uiConfig={uiConfig}
+        firebaseAuth={FirebaseHelper.firebase.auth()}
+      />
+      )
+    };
   
+  const SignOut = () => {
+    setDisabled(true);
+    FirebaseHelper.firebase.auth().signOut();
+  };
+
   const uiConfig = {
     signInFlow: 'popup',
     signInOptions: [
@@ -86,7 +102,7 @@ const App = () => {
 
   
   const ButtonClick = (contacts) => {
-    FirebaseHelper.CheckIn();
+    FirebaseHelper.CheckIn(user.displayName);
     setDisabled(true);
 
     contacts.map((contact) => {

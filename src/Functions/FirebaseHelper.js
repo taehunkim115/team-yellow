@@ -16,51 +16,73 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const user = "John";
+var user = null;
 
-const CheckIn = () => {
+const CheckIn = (googleUser) => {
+    user=googleUser;
     var date = new Date();
-    db.collection("users").doc(user).update({ date:date })
-    .then( () => { console.log('You checked in!'); })
-    .catch( (error) => { console.log("Error writing checkin date: ", error)});
+    if(user){
+        db.collection("users").doc(user).update({ date:date })
+        .then( () => { console.log('You checked in!'); })
+        .catch( (error) => { console.log("Error writing checkin date: ", error)});
+    }
+    
 }
 
 const StoreContact = (newcon) => {
-    return FetchContacts().then(contacts => {
-        contacts.push(newcon);
-        db.collection("users").doc(user).update({ contacts:contacts })
-        .then( () => { console.log('You saved contact info!'); })
-        .catch( (error) => { console.log("Error writing contact info: ", error)});
-        return contacts;
-    });
+    if(user)
+    {
+        return FetchContacts().then(contacts => {
+            contacts.push(newcon);
+            db.collection("users").doc(user).update({ contacts:contacts })
+            .then( () => { console.log('You saved contact info!'); })
+            .catch( (error) => { console.log("Error writing contact info: ", error)});
+            return contacts;
+        });
+    }
+    else{
+        return [];
+    }
 }
 
 const RemoveContact = (oldContact) => {
-    db.collection("users").doc(user).update({"contacts": firebase.firestore.FieldValue.arrayRemove(oldContact)}).catch((error) => console.log(error));
+    if(user){
+        db.collection("users").doc(user).update({"contacts": firebase.firestore.FieldValue.arrayRemove(oldContact)}).catch((error) => console.log(error));
+    }
 }
 
 async function FetchContacts() {
-    return db.collection("users")
-    .doc(user)
-    .get()
-    .then(doc => {
-        if (doc.data().contacts === undefined) return [];
-        return doc.data().contacts;
-    })
-    .catch( (error) => { console.log("Error fetching data for user: ", user);});
+    if(user){
+        return db.collection("users")
+        .doc(user)
+        .get()
+        .then(doc => {
+            if (doc.data().contacts === undefined) return [];
+            return doc.data().contacts;
+        })
+        .catch( (error) => { console.log("Error fetching data for user: ", user);});
+    }
+    else{
+        return [];
+    }
 };
 
 async function FetchTime() {
-    return db.collection("users")
-    .doc(user)
-    .get()
-    .then(doc => {
-        var timestamp = doc.data().date.seconds*1000 + doc.data().date.nanoseconds/1000000;
-        var date = new Date(timestamp);
-        return date;
-    })
-    .catch( (error) => { console.log("Error fetching data for user: ", user);
-                         return new Date(0); });
+    if(user){
+        return db.collection("users")
+        .doc(user)
+        .get()
+        .then(doc => {
+            var timestamp = doc.data().date.seconds*1000 + doc.data().date.nanoseconds/1000000;
+            var date = new Date(timestamp);
+            return date;
+        })
+        .catch( (error) => { console.log("Error fetching data for user: ", user);
+                            return new Date(0); });
+    }
+    else{
+        return new Date(0);
+    }
 };
     
 const FirebaseHelper = {
