@@ -127,7 +127,7 @@ const App = () => {
     }
     setInvalidEmail(false);
 
-    FirebaseHelper.StoreContact({name:name, email:email}).then( newContacts => {
+    FirebaseHelper.StoreContact({name:name, email:email}, user.displayName).then( newContacts => {
       setContacts(newContacts);
     });
 

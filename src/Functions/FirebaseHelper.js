@@ -29,7 +29,8 @@ const CheckIn = (googleUser) => {
     
 }
 
-const StoreContact = (newcon) => {
+const StoreContact = (newcon, googleUser) => {
+    user=googleUser;
     if(user)
     {
         return FetchContacts().then(contacts => {
