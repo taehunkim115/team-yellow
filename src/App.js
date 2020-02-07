@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import 'rbx/index.css';
-import { Title, Button, Container, Table, Field, Control, Input, Content, Modal } from 'rbx';
+import { Title, Button, Container, Table, Field, Control, Input, Content, Message } from 'rbx';
 import FirebaseHelper from './Functions/FirebaseHelper';
 import * as emailjs from 'emailjs-com'
+import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
+
 
 const currentDate = new Date();
 
@@ -28,6 +30,8 @@ const App = () => {
   const [contacts, setContacts] = useState([]);
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
+  const [user, setUser] = useState(null);
+
 
   FirebaseHelper.FetchTime().then(time => { 
     setDisabled(ButtonEnabled(time));
@@ -42,6 +46,43 @@ const App = () => {
     startContacts();
   }, []);
 
+  useEffect(() => {
+    FirebaseHelper.firebase.auth().onAuthStateChanged(setUser);
+  }, []);
+
+  const Banner = ({ user }) => (
+    <React.Fragment>
+      { user ? <Welcome user={ user } /> : <SignIn /> }
+    </React.Fragment>
+  );
+
+  const Welcome = ({ user }) => (
+    <Message color="info">
+      <Message.Header>
+        Welcome, {user.displayName}
+        <Button primary onClick={() => FirebaseHelper.firebase.auth().signOut()}>
+          Log out
+        </Button>
+      </Message.Header>
+    </Message>
+  );
+  
+  const SignIn = () => (
+    <StyledFirebaseAuth
+      uiConfig={uiConfig}
+      firebaseAuth={FirebaseHelper.firebase.auth()}
+    />
+  );
+  
+  const uiConfig = {
+    signInFlow: 'popup',
+    signInOptions: [
+      FirebaseHelper.firebase.auth.GoogleAuthProvider.PROVIDER_ID
+    ],
+    callbacks: {
+      signInSuccessWithAuthResult: () => false
+    }
+  };
 
   
   const ButtonClick = (contacts) => {
@@ -107,10 +148,9 @@ const App = () => {
 
   return (
     <Container>
+      <Banner user={user} />
       <br/>
-      <Button.Group align="centered">
-        <Title>Welcome, { FirebaseHelper.user }!</Title>
-      </Button.Group>
+
 
       <br/>
 

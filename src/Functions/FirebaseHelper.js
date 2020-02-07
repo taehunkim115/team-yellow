@@ -1,6 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/database';
 import 'firebase/firestore';
+import 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBTMi1z22HLI8uiyOvLBOU_TkgSEwj18s4",
@@ -68,7 +69,8 @@ const FirebaseHelper = {
     FetchTime,
     StoreContact,
     FetchContacts,
-    RemoveContact
+    RemoveContact,
+    firebase
 }
 
 export default FirebaseHelper;
