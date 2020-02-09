@@ -12,7 +12,7 @@ const currentDate = new Date();
 emailjs.init("user_5eWzW76xiRQHYgG8R0toY");
 
 var templateParams = {
-  user_name: FirebaseHelper.user, // user name
+  user_name: '', // user name
   to_name: '', // emergency contact name
   to_email: '', // emergency contact email
   from_name: 'CheckIn', // App name
@@ -32,7 +32,7 @@ const App = () => {
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
   const [user, setUser] = useState(null);
-
+  const [UserEmail, setUserEmail] = useState(null);
 
   const StartOnUserLoad = (newUser) =>{
     if(!newUser){
@@ -46,6 +46,7 @@ const App = () => {
       FirebaseHelper.FetchTime(newUser.displayName).then(time => { 
         setDisabled(ButtonEnabled(time, newUser.displayName));
       });
+      setUserEmail(newUser.email);
       FirebaseHelper.FetchContacts(newUser.displayName, newUser.email).then(currContacts => {
         console.log(currContacts);
         setContacts(currContacts);
@@ -106,6 +107,7 @@ const App = () => {
     FirebaseHelper.firebase.auth().signOut();
     setUser(null);
     setContacts([]);
+    setUserEmail(null);
   };
 
   const uiConfig = {
@@ -124,6 +126,7 @@ const App = () => {
     setDisabled(true);
 
     contacts.map((contact) => {
+      templateParams.user_name = user;
       templateParams.to_name = contact.name; // set emergency contact name
       templateParams.to_email = contact.email; // set emergency contact email
       emailjs.send("gmail", "checkin", templateParams, "user_5eWzW76xiRQHYgG8R0toY");
@@ -147,7 +150,11 @@ const App = () => {
     FirebaseHelper.StoreContact({name:name, email:email}, user).then( newContacts => {
       setContacts(newContacts);
     });
-
+    templateParams.user_name = user;
+    templateParams.to_name = user;
+    templateParams.to_email = UserEmail;
+    console.log(templateParams);
+    emailjs.send("gmail", "reminder", templateParams, "user_5eWzW76xiRQHYgG8R0toY");
     var inputs = document.getElementsByTagName('Input');
     for (var i=0; i < inputs.length; i++) {
       inputs[i].value = ''
