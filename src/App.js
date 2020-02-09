@@ -31,12 +31,28 @@ const App = () => {
   const [contacts, setContacts] = useState([]);
   const [invalidEmail, setInvalidEmail] = useState(false);
   const [showContacts, setShowContacts] = useState(false);
-  const [user, setUser] = useState(FirebaseHelper.user);
+  const [user, setUser] = useState(null);
 
 
-  FirebaseHelper.FetchTime().then(time => { 
-    setDisabled(ButtonEnabled(time, user));
-  });
+  const StartOnUserLoad = (newUser) =>{
+    if(!newUser){
+      console.log("user missing");
+    }
+    else{
+      console.log(newUser.displayName)
+    
+      setUser(newUser.displayName);
+      console.log(user)
+      FirebaseHelper.FetchTime(newUser.displayName).then(time => { 
+        setDisabled(ButtonEnabled(time, newUser.displayName));
+      });
+      FirebaseHelper.FetchContacts(newUser.displayName).then(currContacts => {
+        console.log(currContacts);
+        setContacts(currContacts);
+      });
+    }
+  };
+
 
   useEffect(() => {
     const startContacts = () => {
@@ -48,7 +64,7 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    FirebaseHelper.firebase.auth().onAuthStateChanged(setUser);
+    FirebaseHelper.firebase.auth().onAuthStateChanged(StartOnUserLoad);
   }, []);
 
   useEffect(() =>{
@@ -65,7 +81,7 @@ const App = () => {
   const Welcome = ({ user }) => (
     <Message color="info">
       <Message.Header>
-        Welcome, {user.displayName}
+        Welcome, {user}
         <Button primary onClick={SignOut}>
           Log out
         </Button>
@@ -88,6 +104,7 @@ const App = () => {
   const SignOut = () => {
     setDisabled(true);
     FirebaseHelper.firebase.auth().signOut();
+    setUser(null);
   };
 
   const uiConfig = {
@@ -113,9 +130,9 @@ const App = () => {
   }
 
   const RemoveContact = (contact) => {
-    FirebaseHelper.RemoveContact(contact);
+    FirebaseHelper.RemoveContact(contact, user);
 
-    FirebaseHelper.FetchContacts().then(currContacts => {
+    FirebaseHelper.FetchContacts(user).then(currContacts => {
       setContacts(currContacts);
     })
   }
@@ -126,8 +143,7 @@ const App = () => {
       return
     }
     setInvalidEmail(false);
-
-    FirebaseHelper.StoreContact({name:name, email:email}, user.displayName).then( newContacts => {
+    FirebaseHelper.StoreContact({name:name, email:email}, user).then( newContacts => {
       setContacts(newContacts);
     });
 

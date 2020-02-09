@@ -16,10 +16,9 @@ const firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-var user = null;
 
-const CheckIn = (googleUser) => {
-    user=googleUser;
+const CheckIn = (user) => {
+    
     var date = new Date();
     if(user){
         db.collection("users").doc(user).update({ date:date })
@@ -29,8 +28,7 @@ const CheckIn = (googleUser) => {
     
 }
 
-const StoreContact = (newcon, googleUser) => {
-    user=googleUser;
+const StoreContact = (newcon, user) => {
     if(user)
     {
         return FetchContacts().then(contacts => {
@@ -46,14 +44,15 @@ const StoreContact = (newcon, googleUser) => {
     }
 }
 
-const RemoveContact = (oldContact) => {
+const RemoveContact = (oldContact, user) => {
     if(user){
         db.collection("users").doc(user).update({"contacts": firebase.firestore.FieldValue.arrayRemove(oldContact)}).catch((error) => console.log(error));
     }
 }
 
-async function FetchContacts() {
+async function FetchContacts(user) {
     if(user){
+
         return db.collection("users")
         .doc(user)
         .get()
@@ -68,7 +67,7 @@ async function FetchContacts() {
     }
 };
 
-async function FetchTime() {
+async function FetchTime(user) {
     if(user){
         return db.collection("users")
         .doc(user)
@@ -87,7 +86,6 @@ async function FetchTime() {
 };
     
 const FirebaseHelper = {
-    user, 
     CheckIn,
     FetchTime,
     StoreContact,
