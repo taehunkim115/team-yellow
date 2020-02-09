@@ -46,7 +46,7 @@ const App = () => {
       FirebaseHelper.FetchTime(newUser.displayName).then(time => { 
         setDisabled(ButtonEnabled(time, newUser.displayName));
       });
-      FirebaseHelper.FetchContacts(newUser.displayName).then(currContacts => {
+      FirebaseHelper.FetchContacts(newUser.displayName, newUser.email).then(currContacts => {
         console.log(currContacts);
         setContacts(currContacts);
       });

@@ -50,9 +50,9 @@ const RemoveContact = (oldContact, user) => {
     }
 }
 
-async function FetchContacts(user) {
+async function FetchContacts(user, email) {
     if(user){
-
+        db.collection("users").doc(user).update({"email":email});
         return db.collection("users")
         .doc(user)
         .get()
