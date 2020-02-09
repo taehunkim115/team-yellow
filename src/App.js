@@ -105,6 +105,7 @@ const App = () => {
     setDisabled(true);
     FirebaseHelper.firebase.auth().signOut();
     setUser(null);
+    setContacts([]);
   };
 
   const uiConfig = {
