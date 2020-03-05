@@ -4,13 +4,13 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBTMi1z22HLI8uiyOvLBOU_TkgSEwj18s4",
-    authDomain: "checkin-26602.firebaseapp.com",
-    databaseURL: "https://checkin-26602.firebaseio.com",
-    projectId: "checkin-26602",
-    storageBucket: "checkin-26602.appspot.com",
-    messagingSenderId: "929723304013",
-    appId: "1:929723304013:web:af2b97d82f2e6c06cfb404"
+    apiKey: "AIzaSyANgKimbcj0yxxQC2gNuZHFHPhzINhEcxo",
+    authDomain: "travis-187f4.firebaseapp.com",
+    databaseURL: "https://travis-187f4.firebaseio.com",
+    projectId: "travis-187f4",
+    storageBucket: "travis-187f4.appspot.com",
+    messagingSenderId: "375648150489",
+    appId: "1:375648150489:web:2eee7dc7963871c45eefc8"
 };
 
 // Initialize Firebase
