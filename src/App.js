@@ -163,6 +163,7 @@ const App = () => {
 
   const EmergencyContacts = ({contacts}) => {
     return (
+      aaaadfadsfsdfs
       <Table id='contact-table'>
         <Table.Body>
           {contacts.map(contact =>
