@@ -5,7 +5,8 @@ import { Title, Button, Container, Table, Field, Control, Input, Content, Messag
 import FirebaseHelper from './Functions/FirebaseHelper';
 import * as emailjs from 'emailjs-com'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-import CheckInButton from './Components/CheckIn'
+import CheckInButton from './Components/CheckIn';
+import ContactsButton from './Components/EditContacts';
 
 const currentDate = new Date();
 
@@ -210,10 +211,7 @@ const App = () => {
 
       <br/>
       {/* <hr className='divider'/> */}
-      <Button.Group align="centered">
-        <Button hidden={showContacts} onClick={() => {setShowContacts(true)}}>Edit Contacts</Button>
-        <Button hidden={!showContacts} onClick={() => {setShowContacts(false)}}>Close Contact Edit</Button>
-      </Button.Group>
+      <ContactsButton showContacts={showContacts} setShowContacts={setShowContacts}/>
       
       <div hidden={!showContacts}>
       <Title size={5} id='contact-header'>Emergency Contacts</Title>
