@@ -3,7 +3,7 @@ import 'rbx/index.css';
 import { Title, Button, Container, Table, Field, Control, Input, Content, Message } from 'rbx';
 import FirebaseHelper from '../Functions/FirebaseHelper';
 import * as emailjs from 'emailjs-com'
-
+//for testing commit
 var templateParams = {
     user_name: '', // user name
     to_name: '', // emergency contact name
