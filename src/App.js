@@ -204,7 +204,7 @@ const App = () => {
 
       <br/>
 
-      <Title subtitle size={4} className='checkin-text' hidden={ !disabled }>You CheckedIn!</Title>
+      <Title data-cy="success-check" subtitle size={4} className='checkin-text' hidden={ !disabled }>You CheckedIn!</Title>
       <Title className='checkin-text' hidden={ disabled }>Please CheckIn!</Title>
 
       <CheckInButton contacts={contacts} disabled={disabled} setDisabled={setDisabled}/>
