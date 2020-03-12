@@ -5,7 +5,7 @@ import { Title, Button, Container, Table, Field, Control, Input, Content, Messag
 import FirebaseHelper from './Functions/FirebaseHelper';
 import * as emailjs from 'emailjs-com'
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
-
+import CheckInButton from './Components/CheckIn'
 
 const currentDate = new Date();
 
@@ -162,6 +162,7 @@ const App = () => {
   }
 
   const EmergencyContacts = ({contacts}) => {
+    console.log(contacts)
     return (
       <Table id='contact-table'>
         <Table.Body>
@@ -183,6 +184,14 @@ const App = () => {
     );
   };
 
+  // const CheckInButton = () => {
+  //   return (
+  //     <Button.Group align="centered">
+  //       <Button id='checkin-button' rounded={ true } color={ 'danger' } size={ 'large' } data-testid="check-in-button" onClick={()=>{ alert("You have checked in!");ButtonClick(contacts);} } disabled={ disabled }>CheckIn</Button>
+  //     </Button.Group>
+  //   )
+  // }
+
   var currName = '';
   var currNum = '';
 
@@ -197,10 +206,7 @@ const App = () => {
       <Title subtitle size={4} className='checkin-text' hidden={ !disabled }>You CheckedIn!</Title>
       <Title className='checkin-text' hidden={ disabled }>Please CheckIn!</Title>
 
-      <Button.Group align="centered">
-        <Button id='checkin-button' rounded={ true } color={ 'danger' } size={ 'large' } onClick={()=>{ alert("You have checked in!");ButtonClick(contacts);} } disabled={ disabled }>CheckIn</Button>
-      </Button.Group>
-
+      <CheckInButton contacts={contacts} disabled={disabled} setDisabled={setDisabled}/>
 
       <br/>
       {/* <hr className='divider'/> */}
@@ -211,7 +217,7 @@ const App = () => {
       
       <div hidden={!showContacts}>
       <Title size={5} id='contact-header'>Emergency Contacts</Title>
-      <EmergencyContacts contacts={ contacts }/>
+      <EmergencyContacts contacts={ contacts } data-testid="emergency"/>
       <br/>
       
       <Field>

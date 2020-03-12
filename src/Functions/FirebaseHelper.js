@@ -68,6 +68,7 @@ async function FetchContacts(user, email) {
 };
 
 async function FetchTime(user) {
+    console.log(user)
     if(user){
         return db.collection("users")
         .doc(user)
